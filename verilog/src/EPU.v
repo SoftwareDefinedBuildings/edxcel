@@ -291,63 +291,7 @@ ge_frombytes_negate_vartime GFNV (
        .sub_op_b(sub_op_b_gfnv),
        .sub_res(sub_res)
    );    
-//=======================
-
-ila_0 dbg_ila (
-	.clk(modclk), // input wire clk
-
-	.probe0(mul_op_a), // input wire [319:0]  probe0  
-	.probe1(mul_op_b), // input wire [319:0]  probe1 
-	.probe2(mul_res), // input wire [319:0]  probe2 
-	.probe3(mul_valid), // input wire [0:0]  probe3 
-	.probe4(mul_done), // input wire [0:0]  probe4 
-	.probe5(gfnv_valid), // input wire [0:0]  probe5 
-	.probe6(gfnv_done), // input wire [0:0]  probe6 
-	.probe7(gfnv_error), // input wire [0:0]  probe7 
-	.probe8(gfnv_h_x), // input wire [319:0]  probe8 
-	.probe9(gfnv_h_y), // input wire [319:0]  probe9 
-	.probe10(gfnv_h_z), // input wire [319:0]  probe10 
-	.probe11(gfnv_h_t), // input wire [319:0]  probe11 
-	.probe12(resetn), // input wire [0:0]  probe12 
-	.probe13(rresult), // input wire [0:0]  probe13 
-	.probe14(rready), // input wire [0:0]  probe14
-	.probe15(input_fifo_dout_val), // input wire [0:0]  probe15 
-    .probe16(addsub_gfnv_valid) // input wire [0:0]  probe16
-);
-/*
-ila_0 epu_ila (
-	.clk(modclk), // input wire clk
-
-
-	.probe0(gfnv_valid), // input wire [0:0]  probe0  
-	.probe1(gfnv_done), // input wire [0:0]  probe1 
-	.probe2(gfnv_error), // input wire [0:0]  probe2 
-	.probe3(gfnv_h_x), // input wire [319:0]  probe3 
-	.probe4(gfnv_h_y), // input wire [319:0]  probe4 
-	.probe5(gfnv_h_z), // input wire [319:0]  probe5 
-	.probe6(gfnv_h_t), // input wire [319:0]  probe6 
-	.probe7(gdsv_valid), // input wire [0:0]  probe7 
-	.probe8(gdsv_done), // input wire [0:0]  probe8 
-	.probe9(modside_rresult_valid), // input wire [0:0]  probe9
-    .probe10(key), // input wire [255:0]  probe10 
-    .probe11(rhash), // input wire [255:0]  probe11 
-    .probe12(sig), // input wire [511:0]  probe12
-    .probe13(mul_op_a), // input wire [319:0]  probe13 
-    .probe14(mul_op_b), // input wire [319:0]  probe14 
-    .probe15(mul_res), // input wire [319:0]  probe15 
-    .probe16(mul_valid), // input wire [0:0]  probe16 
-    .probe17(mul_done) // input wire [0:0]  probe17
-);
-*/
-/*
-//do this in global switch
-always @ (posedge modclk)
-begin
-    if (modside_rresult_valid == 1b'1)
-        modside_rresult_valid <= 1'b0;
-end
-*/
-         
+//=======================      
          
 reg [4:0] state;         
 always @ (posedge modclk)

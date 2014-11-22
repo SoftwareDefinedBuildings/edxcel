@@ -2,4 +2,9 @@
 *.o
 a.out
 *.pyc
-
+verilog/ip/
+edxcel/
+vivado.log
+vivado.jou
+vivado_*
+integration/
