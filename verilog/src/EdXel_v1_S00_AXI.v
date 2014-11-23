@@ -84,18 +84,12 @@
 		input wire  S_AXI_RREADY,
 		
 		//DEBUG
-		output wire epu0_valid,
-		output wire epu0_sok,
-		output wire epu0_rdy,
-		output wire [31:0] epu0_sigl,
-		output wire [31:0] epu0_keyl,
-		output wire [31:0] epu0_rhashl,
 		input wire epu_clock
 	);
 
 
     
-    localparam integer PL_VERSION = 32'h0410_0202;
+    localparam integer PL_VERSION = 32'h0410_0125;
     
 	// AXI4LITE signals
 	reg [C_S_AXI_ADDR_WIDTH-1 : 0] 	axi_awaddr;
@@ -173,13 +167,6 @@
         );
     end
     endgenerate
-    
-    assign epu0_valid = epu_vld[0];
-    assign epu0_sok = epu_sok[0];
-    assign epu0_rdy = epu_rdy[0];
-    assign epu0_sigl = epu_sig[0][31:0];
-    assign epu0_keyl = epu_key[0][31:0];
-    assign epu0_rhashl = epu_rhash[0][31:0];
     
 	always @( posedge S_AXI_ACLK )
 	begin

@@ -43,15 +43,9 @@
 		output wire [C_S00_AXI_DATA_WIDTH-1 : 0] s00_axi_rdata,
 		output wire [1 : 0] s00_axi_rresp,
 		output wire  s00_axi_rvalid,
-		input wire  s00_axi_rready,
+		input wire  s00_axi_rready
 		
-				//DEBUG
-        output wire epu0_valid,
-        output wire epu0_sok,
-        output wire epu0_rdy,
-        output wire [31:0] epu0_sigl,
-        output wire [31:0] epu0_keyl,
-        output wire [31:0] epu0_rhashl
+		//DEBUG
 	);
 	
 	wire posreset;
@@ -84,12 +78,6 @@
 		.S_AXI_RRESP(s00_axi_rresp),
 		.S_AXI_RVALID(s00_axi_rvalid),
 		.S_AXI_RREADY(s00_axi_rready),
-		.epu0_valid(epu0_valid),
-		.epu0_sok(epu0_sok),
-		.epu0_rdy(epu0_rdy),
-		.epu0_sigl(epu0_sigl),
-		.epu0_keyl(epu0_keyl),
-		.epu0_rhashl(epu0_rhashl),
 		.epu_clock(epu_clk)
 	);
 
