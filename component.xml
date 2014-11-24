@@ -257,7 +257,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>441e49e4</spirit:value>
+            <spirit:value>d1dce4e8</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -288,7 +288,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>ba44afae</spirit:value>
+            <spirit:value>7bb0205a</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -304,7 +304,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>69b27743</spirit:value>
+            <spirit:value>1ded3e61</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -693,6 +693,10 @@
     <spirit:fileSet>
       <spirit:name>xilinx_verilogsynthesis_view_fileset</spirit:name>
       <spirit:file>
+        <spirit:name>edxcel/edxcel.srcs/sources_1/ip/mult32x64v2/mult32x64v2.xci</spirit:name>
+        <spirit:userFileType>xci</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
         <spirit:name>verilog/constraints.xdc</spirit:name>
         <spirit:userFileType>xdc</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
@@ -825,6 +829,10 @@
     <spirit:fileSet>
       <spirit:name>xilinx_verilogbehavioralsimulation_view_fileset</spirit:name>
       <spirit:file>
+        <spirit:name>edxcel/edxcel.srcs/sources_1/ip/mult32x64v2/mult32x64v2.xci</spirit:name>
+        <spirit:userFileType>xci</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
         <spirit:name>verilog/src/ge/consts.coe</spirit:name>
         <spirit:userFileType>coe</spirit:userFileType>
       </spirit:file>
@@ -950,6 +958,10 @@
     <spirit:fileSet>
       <spirit:name>xilinx_verilogtestbench_view_fileset</spirit:name>
       <spirit:file>
+        <spirit:name>verilog/src/testbed/femulx_tb.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+      </spirit:file>
+      <spirit:file>
         <spirit:name>verilog/src/testbed/ge_frombytes_negate_vartime_tb.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
@@ -1007,9 +1019,9 @@
       <xilinx:taxonomies>
         <xilinx:taxonomy>/UserIP</xilinx:taxonomy>
       </xilinx:taxonomies>
-      <xilinx:displayName>EdXel_v1.2.5</xilinx:displayName>
-      <xilinx:coreRevision>8</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2014-11-23T00:22:04Z</xilinx:coreCreationDateTime>
+      <xilinx:displayName>EdXel_v1.2.9</xilinx:displayName>
+      <xilinx:coreRevision>14</xilinx:coreRevision>
+      <xilinx:coreCreationDateTime>2014-11-24T04:27:19Z</xilinx:coreCreationDateTime>
       <xilinx:tags>
         <xilinx:tag xilinx:name="user.org:user:EdXel_v1:1.0_ARCHIVE_LOCATION">/home/immesys/w/FPGA/edxcel</xilinx:tag>
         <xilinx:tag xilinx:name="SDB:user:EdXel_v1:1.0_ARCHIVE_LOCATION">/home/immesys/w/FPGA/edxcel</xilinx:tag>
@@ -1020,7 +1032,7 @@
       <xilinx:xilinxVersion>2014.3.1</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="8ecf72e9"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="e35fa88f"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="032ba2ec"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="7b79cbe5"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="e53e3d27"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="16745e43"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="9ff3310e"/>

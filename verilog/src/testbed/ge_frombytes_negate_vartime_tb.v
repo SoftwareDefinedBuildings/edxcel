@@ -88,7 +88,8 @@ initial begin
   valid = 0;
   #10 rst = 0;
   #10 rst = 1;
-  #20 s = 320'h80c9efc6b58a452272c5fe77e761b14a8be521f95679b7290da1e65d2596488a;
+  #20 s = 320'h973ddda3cda397385e46a3bc714e2f1572e3ea6eb09667e3604520ce9638bf06;
+  //320'h80c9efc6b58a452272c5fe77e761b14a8be521f95679b7290da1e65d2596488a;
   
   valid = 1;
   #10 valid = 0;

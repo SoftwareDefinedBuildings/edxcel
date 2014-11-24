@@ -125,7 +125,7 @@ add64 add_d (
   .S(add_d_out)      // output wire [63 : 0] S
 );            
 
-reg [33:0] cycle;
+reg [35:0] cycle;
 
 reg signed [31:0] g1_19;
 reg signed [31:0] g2_19;
@@ -249,6 +249,82 @@ reg signed [63:0] h7;
 reg signed [63:0] h8;
 reg signed [63:0] h9;
 
+reg signed [63:0] h0f;
+reg signed [63:0] h1f;
+reg signed [63:0] h2f;
+reg signed [63:0] h3f;
+reg signed [63:0] h4f;
+reg signed [63:0] h5f;
+reg signed [63:0] h6f;
+reg signed [63:0] h7f;
+reg signed [63:0] h8f;
+reg signed [63:0] h9f;
+
+
+    
+always @(*) 
+begin : combiner
+    reg signed [63:0] carry0;
+    reg signed [63:0] carry1;
+    reg signed [63:0] carry2;
+    reg signed [63:0] carry3;
+    reg signed [63:0] carry4;
+    reg signed [63:0] carry5;
+    reg signed [63:0] carry6;
+    reg signed [63:0] carry7;
+    reg signed [63:0] carry8;
+    reg signed [63:0] carry9;
+    reg signed [63:0] h0t;
+    reg signed [63:0] h1t;
+    reg signed [63:0] h2t;
+    reg signed [63:0] h3t;
+    reg signed [63:0] h4t;
+    reg signed [63:0] h5t;
+    reg signed [63:0] h6t;
+    reg signed [63:0] h7t;
+    reg signed [63:0] h8t;
+    reg signed [63:0] h9t;
+    
+    
+    carry0 = (h0 + (64'sd1 << 25)) >>> 26;
+    h1t = h1 + carry0;
+    h0t = h0 - (carry0 << 26);
+    carry4 = (h4 + (64'sd1 << 25)) >>> 26;
+    h5t = h5 + carry4;
+    h4t = h4 - (carry4 << 26);
+    carry1 = (h1t + (64'sd1 << 24)) >>> 25;
+    h2t = h2 + carry1;
+    h1t = h1t - (carry1 << 25);
+    carry5 = (h5t + (64'sd1 << 24)) >>> 25;
+    h6t = h6 + carry5;
+    h5t = h5t - (carry5 << 25);
+    carry2 = (h2t + (64'sd1 << 25)) >>> 26;
+    h3t = h3 + carry2;
+    h2f = h2t - (carry2 << 26);
+    carry6 = (h6t + (64'sd1 << 25)) >>> 26;
+    h7t = h7 + carry6;
+    h6f = h6t - (carry6 << 26);
+
+    carry3 = (h3t + (64'sd1 << 24)) >>> 25;
+    h4t = h4t + carry3;
+    h3f = h3t - (carry3 << 25);
+    carry7 = (h7t + (64'sd1 << 24)) >>> 25;
+    h8t = h8 + carry7;
+    h7f = h7t - (carry7 << 25);
+    carry4 = (h4t + (64'sd1 << 25)) >>> 26;
+    h5f = h5t + carry4;
+    h4f = h4t - (carry4 << 26);
+    carry8 = (h8t + (64'sd1 << 25)) >>> 26;
+    h9t = h9 + carry8;
+    h8f = h8t - (carry8 << 26);
+    carry9 = (h9t + (64'sd1 << 24)) >>> 25;
+    h0t = h0t + carry9 * 19; 
+    h9f = h9t - (carry9 << 25);
+    carry0 = (h0t + (64'sd1 << 25)) >>> 26;
+    h1f = h1t + carry0;
+    h0f = h0t - (carry0 << 26);
+    
+end
 reg [319:0] rres;
 reg rdone;
 
@@ -273,6 +349,7 @@ begin
     mul_c_in64 <= 0;
     mul_d_in32 <= 0;
     mul_d_in64 <= 0;
+    
     h0 <= h0;
     cycle <= cycle << 1;
     rdone <= 0;
@@ -881,17 +958,32 @@ begin
                     h2 <= add_b_out;
                     h3 <= add_c_out;
                     h4 <= add_d_out;
-                end
-                
+
+                    end
+                    
     33'h040000000  : begin //========= CYCLE 31 ============
-                    h5 <= add_a_out;
-                    h6 <= add_b_out;
-                    h7 <= add_c_out;
-                    h8 <= add_d_out;
-                end
-    33'h080000000 : begin : carryblk //========= CYCLE 32 ============
-        
-                    reg signed [63:0] carry0;
+                     h5 <= add_a_out;
+                     h6 <= add_b_out;
+                     h7 <= add_c_out;
+                     h8 <= add_d_out;
+                    
+                    end
+                    
+    34'h080000000  : begin //========= CYCLE 31 ============
+                    
+                     end
+                     
+     34'h100000000  : begin //========= CYCLE 31 ============
+                 
+                      end
+   //  34'h200000000  : begin //========= CYCLE 31 ============
+                       
+   //                   end
+                      
+     34'h200000000  : begin //========= CYCLE 31 ============
+                       
+                    
+                 /*   reg signed [63:0] carry0;
                     reg signed [63:0] carry1;
                     reg signed [63:0] carry2;
                     reg signed [63:0] carry3;
@@ -901,7 +993,7 @@ begin
                     reg signed [63:0] carry7;
                     reg signed [63:0] carry8;
                     reg signed [63:0] carry9;
-                    
+    
                     carry0 = (h0 +  (64'sd1 << 25)) >>> 26;
                     h1 = h1 + carry0;
                     h0 = h0 - (carry0 << 26);
@@ -920,7 +1012,7 @@ begin
                     carry6 = (h6 + (64'sd1 << 25)) >>> 26;
                     h7 = h7 + carry6;
                     h6 = h6 - (carry6 << 26);
-
+                
                     carry3 = (h3 + (64'sd1 << 24)) >>> 25;
                     h4 = h4 + carry3;
                     h3 = h3 - (carry3 << 25);
@@ -949,7 +1041,61 @@ begin
                     rres[6*32 +: 32] <= h6;
                     rres[7*32 +: 32] <= h7;
                     rres[8*32 +: 32] <= h8;
-                    rres[9*32 +: 32] <= h9;
+                    rres[9*32 +: 32] <= h9; */
+
+                    
+                    /*
+                    carry0 = (h0 +  (64'sd1 << 25)) >>> 26;
+                    h1t = h1 + carry0;
+                    h0t = h0 - (carry0 << 26);
+                    
+                    carry4 = (h4 + (64'sd1 << 25)) >>> 26;
+                    h5t = h5 + carry4;
+                    h4t = h4 - (carry4 << 26);
+                    carry1 = (h1t + (64'sd1 << 24)) >>> 25;
+                    h2t = h2 + carry1;
+                    h1t = h1t - (carry1 << 25);
+                    carry5 = (h5t + (64'sd1 << 24)) >>> 25;
+                    h6t = h6 + carry5;
+                    h5t = h5t - (carry5 << 25);
+                    carry2 = (h2t + (64'sd1 << 25)) >>> 26;
+                    h3t = h3 + carry2;
+                    h2t = h2t - (carry2 << 26);
+                    carry6 = (h6t + (64'sd1 << 25)) >>> 26;
+                    h7t = h7 + carry6;
+                    h6t = h6t - (carry6 << 26);
+
+                    carry3 = (h3t + (64'sd1 << 24)) >>> 25;
+                    h4t = h4t + carry3;
+                    h3t = h3t - (carry3 << 25);
+                    carry7 = (h7t + (64'sd1 << 24)) >>> 25;
+                    h8t = h8 + carry7;
+                    h7t = h7t - (carry7 << 25);
+                    carry4 = (h4t + (64'sd1 << 25)) >>> 26;
+                    h5t = h5t + carry4;
+                    h4t = h4t - (carry4 << 26);
+                    carry8 = (h8t + (64'sd1 << 25)) >>> 26;
+                    h9t = h9 + carry8;
+                    h8t = h8t - (carry8 << 26);
+                    carry9 = (h9t + (64'sd1 << 24)) >>> 25;
+                    h0t = h0t + carry9 * 19; //TODO reuse 1 stage adder further up
+                    h9t = h9t - (carry9 << 25);
+                    carry0 = (h0t + (64'sd1 << 25)) >>> 26;
+                    h1t = h1t + carry0;
+                    h0t = h0t - (carry0 << 26);
+                    */
+                    
+                    rres[0*32 +: 32] <= h0f;
+                    rres[1*32 +: 32] <= h1f;
+                    rres[2*32 +: 32] <= h2f;
+                    rres[3*32 +: 32] <= h3f;
+                    rres[4*32 +: 32] <= h4f;
+                    rres[5*32 +: 32] <= h5f;
+                    rres[6*32 +: 32] <= h6f;
+                    rres[7*32 +: 32] <= h7f;
+                    rres[8*32 +: 32] <= h8f;
+                    rres[9*32 +: 32] <= h9f;
+                    
                     rdone <= 1;
                     cycle <= 0;
                 end

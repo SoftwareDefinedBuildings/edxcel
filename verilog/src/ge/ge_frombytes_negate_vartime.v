@@ -99,8 +99,8 @@ fe_frombytes FROMBYTES(
    );
    
 
-reg [255:0] tobytes_in;
-wire [319:0] tobytes_res;
+reg [319:0] tobytes_in;
+wire [255:0] tobytes_res;
 reg tobytes_valid;
 wire tobytes_done;
 fe_tobytes TOBYTES(

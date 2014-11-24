@@ -48,15 +48,20 @@ reg modside_rresult;
 reg modside_rresult_valid;
 reg weni;
 reg reni;
-wire input_fifo_dout;
+reg [255:0] rkey;         
+reg [511:0] rsig;         
+reg [255:0] rrhash; 
+wire [1023:0] input_fifo_din;
+assign input_fifo_din = {sig, key, rhash};
+wire [1023:0] input_fifo_dout;
 wire input_fifo_dout_val;
 fifo_generator_0 inputfifo (
   .rst(posrst),        // input wire rst
   .wr_clk(axiclk),  // input wire wr_clk
   .rd_clk(modclk),  // input wire rd_clk
-  .din(valid),        // input wire [0 : 0] din
+  .din(input_fifo_din),        // input wire [0 : 0] din
   .wr_en(valid),    // input wire wr_en
-  .rd_en(reni),    // input wire rd_en
+  .rd_en(reni),    // input wire rd_en 
   .dout(input_fifo_dout),      // output wire [0 : 0] dout
   .valid(input_fifo_dout_val)    // output wire valid
 );
@@ -225,8 +230,8 @@ wire gdsv_done;
 
 ge_double_scalarmult_vartime GDSV(  
     //Parameters
-    .a(rhash),
-    .b(sig[511:256]),
+    .a(rrhash),
+    .b(rsig[511:256]),
     .A_X(A_X),
     .A_Y(A_Y),
     .A_Z(A_Z),
@@ -265,7 +270,7 @@ wire gfnv_done;
 reg gfnv_valid;
 
 ge_frombytes_negate_vartime GFNV (
-       .s(key),
+       .s(rkey),
        .h_x(gfnv_h_x),
        .h_y(gfnv_h_y),
        .h_z(gfnv_h_z),
@@ -292,7 +297,7 @@ ge_frombytes_negate_vartime GFNV (
        .sub_res(sub_res)
    );    
 //=======================      
-         
+        
 reg [4:0] state;         
 always @ (posedge modclk)
 begin
@@ -300,6 +305,9 @@ begin
     begin
         //reset
         state <= 5'b0;
+        rkey <= 256'h0;
+        rrhash <= 256'h0;
+        rsig <= 512'h0;
     end else begin
         addsub_gfnv_valid <= addsub_gfnv_valid;
         addsub_gdsv_valid <= addsub_gdsv_valid;
@@ -318,8 +326,11 @@ begin
             reni <= 0;
         case (state)
         5'd0  : begin
-                    if (input_fifo_dout_val == 1'b1 && input_fifo_dout == 1'b1)
+                    if (input_fifo_dout_val == 1'b1)
                     begin
+                        rsig <= input_fifo_dout [1023:512];
+                        rkey <= input_fifo_dout [511:256];
+                        rrhash <= input_fifo_dout [255:0];
                         gfnv_valid <= 1'b1;
                         addsub_gfnv_valid <= 1'b1;
                         addsub_gdsv_valid <= 1'b0;
@@ -357,7 +368,7 @@ begin
                     if(gdsv_done)
                     begin
                         $display("GDSV done: %h", gdsv_ge_bytes);
-                        if (gdsv_ge_bytes == sig[255:0])
+                        if (gdsv_ge_bytes == rsig[255:0])
                         begin
                             modside_rresult_valid <= 1'b1;
                             modside_rresult <= 1'b1;  
