@@ -61,6 +61,8 @@ set files [list \
  "[file normalize "$origin_dir/verilog/src/fe/fe_pow22523.v"]"\
  "[file normalize "$origin_dir/verilog/src/fe/fe_invert.v"]"\
  "[file normalize "$origin_dir/verilog/src/fe/fe_mulx.v"]"\
+ "[file normalize "$origin_dir/verilog/src/fe/fe_tobytes.v"]"\
+ "[file normalize "$origin_dir/verilog/src/fe/fe_frombytes.v"]"\
  "[file normalize "$origin_dir/verilog/src/ge/ge_frombytes_negate_vartime.v"]"\
  "[file normalize "$origin_dir/verilog/src/ge/ge_double_scalarmult_vartime.v"]"\
  "[file normalize "$origin_dir/verilog/src/ge/consts.coe"]"\

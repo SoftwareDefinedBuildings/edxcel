@@ -53,10 +53,6 @@ void initialize_pl()
 	xl_signok_flags     = (uint32_t volatile * )(pl_base + 0x0014);
 	xl_epu              = (epu_t volatile * )(pl_base + 0x2000);
 	
-	printf("PLBASE is %x\n",(uint32_t)PL);
-	printf("PLBASE is %x\n",(uint32_t)pl_base);
-	printf("XL_EPU is %x\n",(uint32_t)xl_epu);
-	printf("GO[0] is %x  (%x)\n",(uint32_t)(&xl_epu[0].ctl), (uint32_t)(&xl_epu[0].ctl) - pl_base);
 	uint32_t v = *xl_version;
 	if (v >> 16 == 0x0410)
 	{

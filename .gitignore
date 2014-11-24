@@ -8,3 +8,5 @@ vivado.log
 vivado.jou
 vivado_*
 integration/
+.Xil
+xgui

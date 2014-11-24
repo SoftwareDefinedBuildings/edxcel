@@ -257,7 +257,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>bb2750ac</spirit:value>
+            <spirit:value>d1dce4e8</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -288,7 +288,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>45dcbda0</spirit:value>
+            <spirit:value>7bb0205a</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -297,14 +297,14 @@
         <spirit:displayName>Verilog Test Bench</spirit:displayName>
         <spirit:envIdentifier>verilogSource:vivado.xilinx.com:simulation.testbench</spirit:envIdentifier>
         <spirit:language>verilog</spirit:language>
-        <spirit:modelName>ge_double_scalarmult_vartime_tb</spirit:modelName>
+        <spirit:modelName>EPU_tb</spirit:modelName>
         <spirit:fileSetRef>
           <spirit:localName>xilinx_verilogtestbench_view_fileset</spirit:localName>
         </spirit:fileSetRef>
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>08421a64</spirit:value>
+            <spirit:value>1ded3e61</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -318,7 +318,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>f51e5c58</spirit:value>
+            <spirit:value>a851faf3</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -663,96 +663,6 @@
           </spirit:driver>
         </spirit:wire>
       </spirit:port>
-      <spirit:port>
-        <spirit:name>epu0_valid</spirit:name>
-        <spirit:wire>
-          <spirit:direction>out</spirit:direction>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>wire</spirit:typeName>
-              <spirit:viewNameRef>xilinx_verilogsynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
-      <spirit:port>
-        <spirit:name>epu0_sok</spirit:name>
-        <spirit:wire>
-          <spirit:direction>out</spirit:direction>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>wire</spirit:typeName>
-              <spirit:viewNameRef>xilinx_verilogsynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
-      <spirit:port>
-        <spirit:name>epu0_rdy</spirit:name>
-        <spirit:wire>
-          <spirit:direction>out</spirit:direction>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>wire</spirit:typeName>
-              <spirit:viewNameRef>xilinx_verilogsynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
-      <spirit:port>
-        <spirit:name>epu0_sigl</spirit:name>
-        <spirit:wire>
-          <spirit:direction>out</spirit:direction>
-          <spirit:vector>
-            <spirit:left spirit:format="long" spirit:resolve="immediate">31</spirit:left>
-            <spirit:right spirit:format="long" spirit:resolve="immediate">0</spirit:right>
-          </spirit:vector>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>wire</spirit:typeName>
-              <spirit:viewNameRef>xilinx_verilogsynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
-      <spirit:port>
-        <spirit:name>epu0_keyl</spirit:name>
-        <spirit:wire>
-          <spirit:direction>out</spirit:direction>
-          <spirit:vector>
-            <spirit:left spirit:format="long" spirit:resolve="immediate">31</spirit:left>
-            <spirit:right spirit:format="long" spirit:resolve="immediate">0</spirit:right>
-          </spirit:vector>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>wire</spirit:typeName>
-              <spirit:viewNameRef>xilinx_verilogsynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
-      <spirit:port>
-        <spirit:name>epu0_rhashl</spirit:name>
-        <spirit:wire>
-          <spirit:direction>out</spirit:direction>
-          <spirit:vector>
-            <spirit:left spirit:format="long" spirit:resolve="immediate">31</spirit:left>
-            <spirit:right spirit:format="long" spirit:resolve="immediate">0</spirit:right>
-          </spirit:vector>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>wire</spirit:typeName>
-              <spirit:viewNameRef>xilinx_verilogsynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
     </spirit:ports>
     <spirit:modelParameters>
       <spirit:modelParameter xsi:type="spirit:nameValueTypeType" spirit:dataType="integer">
@@ -783,6 +693,10 @@
     <spirit:fileSet>
       <spirit:name>xilinx_verilogsynthesis_view_fileset</spirit:name>
       <spirit:file>
+        <spirit:name>edxcel/edxcel.srcs/sources_1/ip/mult32x64v2/mult32x64v2.xci</spirit:name>
+        <spirit:userFileType>xci</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
         <spirit:name>verilog/constraints.xdc</spirit:name>
         <spirit:userFileType>xdc</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
@@ -794,10 +708,6 @@
       </spirit:file>
       <spirit:file>
         <spirit:name>verilog/ip/clk_wiz_0/clk_wiz_0.xci</spirit:name>
-        <spirit:userFileType>xci</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>project2/project2.srcs/sources_1/ip/ila_0/ila_0.xci</spirit:name>
         <spirit:userFileType>xci</spirit:userFileType>
       </spirit:file>
       <spirit:file>
@@ -829,6 +739,14 @@
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
+        <spirit:name>verilog/src/fe/fe_tobytes.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>verilog/src/fe/fe_frombytes.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+      </spirit:file>
+      <spirit:file>
         <spirit:name>verilog/src/fe/fe_invert.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
@@ -855,7 +773,7 @@
       <spirit:file>
         <spirit:name>verilog/src/EdXel_v1.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_1fb340f9</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_fcba8b8b</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
@@ -911,6 +829,10 @@
     <spirit:fileSet>
       <spirit:name>xilinx_verilogbehavioralsimulation_view_fileset</spirit:name>
       <spirit:file>
+        <spirit:name>edxcel/edxcel.srcs/sources_1/ip/mult32x64v2/mult32x64v2.xci</spirit:name>
+        <spirit:userFileType>xci</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
         <spirit:name>verilog/src/ge/consts.coe</spirit:name>
         <spirit:userFileType>coe</spirit:userFileType>
       </spirit:file>
@@ -920,10 +842,6 @@
       </spirit:file>
       <spirit:file>
         <spirit:name>verilog/ip/fifo_generator_0/fifo_generator_0.xci</spirit:name>
-        <spirit:userFileType>xci</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>project2/project2.srcs/sources_1/ip/ila_0/ila_0.xci</spirit:name>
         <spirit:userFileType>xci</spirit:userFileType>
       </spirit:file>
       <spirit:file>
@@ -952,6 +870,14 @@
       </spirit:file>
       <spirit:file>
         <spirit:name>verilog/src/fe/fe_invert.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>verilog/src/fe/fe_tobytes.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>verilog/src/fe/fe_frombytes.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -1032,6 +958,18 @@
     <spirit:fileSet>
       <spirit:name>xilinx_verilogtestbench_view_fileset</spirit:name>
       <spirit:file>
+        <spirit:name>verilog/src/testbed/femulx_tb.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>verilog/src/testbed/ge_frombytes_negate_vartime_tb.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>verilog/src/testbed/EPU_tb.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+      </spirit:file>
+      <spirit:file>
         <spirit:name>verilog/src/fe/fe_common.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
@@ -1043,10 +981,10 @@
     <spirit:fileSet>
       <spirit:name>xilinx_xpgui_view_fileset</spirit:name>
       <spirit:file>
-        <spirit:name>xgui/EdXel_v1_v1_2.tcl~</spirit:name>
+        <spirit:name>xgui/EdXel_v1_v1_2.tcl</spirit:name>
+        <spirit:fileType>tclSource</spirit:fileType>
         <spirit:userFileType>XGUI_VERSION_2</spirit:userFileType>
-        <spirit:userFileType>unknown</spirit:userFileType>
-        <spirit:userFileType>CHECKSUM_f51e5c58</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_a851faf3</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
   </spirit:fileSets>
@@ -1081,9 +1019,9 @@
       <xilinx:taxonomies>
         <xilinx:taxonomy>/UserIP</xilinx:taxonomy>
       </xilinx:taxonomies>
-      <xilinx:displayName>EdXel_v1.2.3</xilinx:displayName>
-      <xilinx:coreRevision>5</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2014-11-22T19:41:27Z</xilinx:coreCreationDateTime>
+      <xilinx:displayName>EdXel_v1.2.9</xilinx:displayName>
+      <xilinx:coreRevision>14</xilinx:coreRevision>
+      <xilinx:coreCreationDateTime>2014-11-24T04:27:19Z</xilinx:coreCreationDateTime>
       <xilinx:tags>
         <xilinx:tag xilinx:name="user.org:user:EdXel_v1:1.0_ARCHIVE_LOCATION">/home/immesys/w/FPGA/edxcel</xilinx:tag>
         <xilinx:tag xilinx:name="SDB:user:EdXel_v1:1.0_ARCHIVE_LOCATION">/home/immesys/w/FPGA/edxcel</xilinx:tag>
@@ -1094,8 +1032,8 @@
       <xilinx:xilinxVersion>2014.3.1</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="8ecf72e9"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="e35fa88f"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="f597bc31"/>
-      <xilinx:checksum xilinx:scope="ports" xilinx:value="9fb335ff"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="7b79cbe5"/>
+      <xilinx:checksum xilinx:scope="ports" xilinx:value="e53e3d27"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="16745e43"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="9ff3310e"/>
     </xilinx:packagingInfo>

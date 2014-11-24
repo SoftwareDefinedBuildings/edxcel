@@ -100,13 +100,11 @@ int ed25519_verify_rhash(const unsigned char *signature, const unsigned char *rh
     ge_p2 R;
 
 	if (signature[63] & 224) {
-	    printf("patha");
         return 0;
     }
 
     //TO FPGA: publickey[..32], h[..32], sig[64]
     if (ge_frombytes_negate_vartime(&A, public_key) != 0) {
-        printf("pathb");
         return 0;
     }
     ge_double_scalarmult_vartime(&R, rhash, &A, signature + 32);
