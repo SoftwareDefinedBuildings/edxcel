@@ -23,6 +23,7 @@
 
 #define MSG_LEN 32
 #define MAX_TESTS 100
+#define EPU_IDX 0  // assume only one EPU
 
 void calc_rhash(const unsigned char *signature, const unsigned char *message, size_t message_len, const unsigned char *public_key, unsigned char* rhash)
 {
@@ -41,43 +42,40 @@ inline int sw_verify(uint8_t *sig, uint8_t *msg, uint8_t *key)
   return ed25519_verify(sig, msg, MSG_LEN, key);
 }
 
-uint32_t hw_verify_async(uint8_t *sig, uint8_t *rhash, uint8_t *key)
+
+void hw_verify_load(uint8_t *sig, uint8_t *rhash, uint8_t *key)
 {
-    //Find available EPU
-    xl_epu[0].reset = 1;
-    xl_epu[0].reset = 0;
-    xl_epu[0].reset = 1;
     int i;
-    uint32_t epu_idx = *xl_available_idx;
-    assert (epu_idx != XL_AVAILABLE_NONE);
     
     //Load signature
     for (i=0;i<SIGNATURE_WORDS;i++)
-        xl_epu[epu_idx].sig[i] = ((uint32_t*)&sig[0])[i];
+        xl_epu[EPU_IDX].sig[i] = ((uint32_t*)&sig[0])[i];
     
     //Load message
     for (i=0;i<RHASH_WORDS;i++)
-        xl_epu[epu_idx].rhash[i] = ((uint32_t*)&rhash[0])[i];
+        xl_epu[EPU_IDX].rhash[i] = ((uint32_t*)&rhash[0])[i];
         
     //Load key    
     for (i=0;i<KEY_WORDS;i++)
-        xl_epu[epu_idx].key[i] = ((uint32_t*)&key[0])[i];
-    
-    //Start computation
-    xl_epu[epu_idx].ctl = XL_GO_CODE;
-
-    return epu_idx;
+        xl_epu[EPU_IDX].key[i] = ((uint32_t*)&key[0])[i];
 }
 
 
-uint8_t hw_verify_wait(uint32_t epu_idx)
+void hw_verify_start()
+{
+    //Start computation
+    xl_epu[EPU_IDX].ctl = XL_GO_CODE;
+}
+
+
+uint8_t hw_verify_wait()
 {
     uint32_t result;
     
     //Wait until calculation is done
-    while(!xl_epu[epu_idx].ctl);
+    while(!xl_epu[EPU_IDX].ctl);
 
-    result = xl_epu[epu_idx].ctl;
+    result = xl_epu[EPU_IDX].ctl;
     //printf("result was: %d\n", result);
     //result = xl_epu[epu_idx].ctl;
     //printf("result was: %d\n", result);
@@ -90,14 +88,14 @@ unsigned int load(const char *fname, uint8_t (*sigs)[SIGNATURE_LEN], uint8_t (*k
 {
     //assume pointers are not NULL
     
-    unsigned char str[256];
+    char str[256];
     FILE *fp = fopen(fname, "r");
     // assume the file exists
     
     unsigned int count = 0;
     int i;
+    char *pos;
     while (1) {
-        unsigned char *pos;
 
         if (count >= MAX_TESTS)
             break;
@@ -138,7 +136,7 @@ void go(const char* fname)
     __attribute__((aligned(4))) uint8_t sigs [MAX_TESTS][SIGNATURE_LEN];
     __attribute__((aligned(4))) uint8_t keys [MAX_TESTS][KEY_LEN];
     __attribute__((aligned(4))) uint8_t msgs [MAX_TESTS][MSG_LEN];
-    __attribute__((aligned(4))) uint8_t rhashs [MAX_TESTS][RHASH_LEN];
+    __attribute__((aligned(4))) uint8_t rhashs [MAX_TESTS][RHASH_LEN*2]; // RHASH needs twice length space to calculate
   
     uint8_t hw_results[MAX_TESTS];
     uint8_t sw_results[MAX_TESTS];
@@ -148,23 +146,28 @@ void go(const char* fname)
     clock_t start;
     clock_t stop;
 
+    sw_results[0] = 1;
     // FPGA
-    uint32_t epu_idx;
     // start timing
-    start = clock();
-    calc_rhash(sigs[0], msgs[0], MSG_LEN, keys[0], rhashs[0]);
-    for (i = 0; i < count-1; i++) {
-        epu_idx = hw_verify_async(sigs[i], rhashs[i], keys[i]);
-        calc_rhash(sigs[i+1], msgs[i+1], MSG_LEN, keys[i+1], rhashs[i+1]);
-        hw_results[i] = hw_verify_wait(epu_idx);
-        // printf("HW result %d: %d\n", i, hw_results[i]);
-    }
-    epu_idx = hw_verify_async(sigs[i], rhashs[i], keys[i]);
-    hw_results[i] = hw_verify_wait(epu_idx);
-    // printf("HW result %d: %d\n", i, hw_results[i]);
-    // stop timing
-    stop = clock();
-    printf("HW takes %f ms for %u signatures.\n", ((double)(stop - start))/(CLOCKS_PER_SEC/1000), count);
+     start = clock();
+     xl_epu[EPU_IDX].reset = 1;
+     xl_epu[EPU_IDX].reset = 0;
+     xl_epu[EPU_IDX].reset = 1;
+     calc_rhash(sigs[0], msgs[0], MSG_LEN, keys[0], rhashs[0]);
+     hw_verify_load(sigs[0], rhashs[0], keys[0]);
+     for (i = 0; i < count-1; i++) {
+         hw_verify_start();
+         calc_rhash(sigs[i+1], msgs[i+1], MSG_LEN, keys[i+1], rhashs[i+1]);
+         hw_verify_load(sigs[i+1], rhashs[i+1], keys[i+1]);
+         hw_results[i] = hw_verify_wait();
+         //printf("HW result %d: %d\n SW result 0: %d\n\n", i, hw_results[i], sw_results[0]);
+     }
+     hw_verify_start();
+     hw_results[i] = hw_verify_wait();
+     // printf("HW result %d: %d\n", i, hw_results[i]);
+     // stop timing
+     stop = clock();
+     printf("HW takes %f ms for %u signatures.\n", ((double)(stop - start))/(CLOCKS_PER_SEC/1000), count);
     
     // ARM
     // start timing
@@ -177,9 +180,13 @@ void go(const char* fname)
     stop = clock();
     printf("SW takes %f ms for %u signatures.\n", ((double)(stop - start))/(CLOCKS_PER_SEC/1000), count);
 
+    int match = 1;
     for (i = 0; i < count; i++) {
         if (sw_results[i] != hw_results[i]) {
+            match = 0;
             printf("HW (%d) and SW (%d) results don't match at index %d!.\n", hw_results[i], sw_results[i], i);
         }
     }
+    if (match)
+        printf("HW and SW matchs!");
 }

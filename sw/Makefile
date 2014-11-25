@@ -1,7 +1,10 @@
 LIBS  = 
-CFLAGS = -Wall -I./ed25519/src/ -I.
-GCC = arm-xilinx-linux-gnueabi-gcc
-SRC=$(wildcard *.c ed25519/src/*.c)
+CFLAGS = -Wall -I../verilog/c_ref/src/ -I.
+#GCC = arm-xilinx-linux-gnueabi-gcc
+GCC = arm-linux-gnueabi-gcc
+SRC=$(wildcard *.c ../verilog/c_ref/src/*.c)
+
+run: bins
 
 upload: bins
 	cp edxcel /tftpboot
