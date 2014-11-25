@@ -35,14 +35,19 @@ void calc_rhash(const unsigned char *signature, const unsigned char *message, si
     sc_reduce(rhash);
 }
 
-uint8_t hw_verify_async(uint8_t *sig, uint8_t *rhash, uint8_t *key)
+//Return 1 if sig is ok, 0 if sig fails
+inline int sw_verify(uint8_t *sig, uint8_t *msg, uint8_t *key)
+{
+  return ed25519_verify(sig, msg, MSG_LEN, key);
+}
+
+uint32_t hw_verify_async(uint8_t *sig, uint8_t *rhash, uint8_t *key)
 {
     //Find available EPU
     xl_epu[0].reset = 1;
     xl_epu[0].reset = 0;
     xl_epu[0].reset = 1;
     int i;
-    uint32_t result;
     uint32_t epu_idx = *xl_available_idx;
     assert (epu_idx != XL_AVAILABLE_NONE);
     
@@ -60,10 +65,15 @@ uint8_t hw_verify_async(uint8_t *sig, uint8_t *rhash, uint8_t *key)
     
     //Start computation
     xl_epu[epu_idx].ctl = XL_GO_CODE;
+
+    return epu_idx;
 }
 
-uint8_t hw_verify_wait()
+
+uint8_t hw_verify_wait(uint32_t epu_idx)
 {
+    uint32_t result;
+    
     //Wait until calculation is done
     while(!xl_epu[epu_idx].ctl);
 
@@ -75,74 +85,8 @@ uint8_t hw_verify_wait()
     return result == 1;
 }
 
-// int hexnibble_to_int(char nibble) {
-//     if (nibble >= '0' && nibble <= '9')
-//         return nibble - '0';
-//     if (nibble >= 'A' && nibble <= 'F')
-//         return (nibble - 'A') + 10;
-//     if (nibble >= 'a' && nibble <= 'f')
-//         return (nibble - 'a') + 10;
-//     return 0;
-// }
 
-void check_sig(uint8_t *sig, uint8_t *key, uint8_t* message, size_t message_len) {
-    __attribute__((aligned(4))) uint8_t rhash_arr [32];
-    calc_rhash(sig, message, message_len, key, rhash_arr);
-    int result_sw = sw_verify_rhash(sig, rhash_arr, key);
-    int result_hw = hw_verify_sync(sig, rhash_arr, key);
-    if (result_sw == result_hw)
-        printf("[PASS] sw=%d hw=%d\n",result_sw, result_hw);
-    else
-        printf("[FAIL] sw=%d hw=%d\n",result_sw, result_hw);
-}
-
-// void ldhex(int bytes, unsigned char* dst, const char* str)
-// {
-//     int i;
-//     for (i = 0; i < bytes;i++)
-//         dst[bytes-i - 1] = (hexnibble_to_int(str[i*2]) << 4) +  hexnibble_to_int(str[i*2 + 1]);
-// }
-
-void check_hex_sig(const char* sig_big_endian, const char* key_big_endian, const char* rhash_big_endian) {
-    __attribute__((aligned(4))) uint8_t sig_arr [64];
-    __attribute__((aligned(4))) uint8_t key_arr [32];
-    __attribute__((aligned(4))) uint8_t rhash_arr [32];
-    int i;
-    for (i = 0; i < 64;i++)
-        sig_arr[63-i] = (hexnibble_to_int(sig_big_endian[i*2]) << 4) +  hexnibble_to_int(sig_big_endian[i*2 + 1]);
-    for (i = 0; i < 32;i++)
-        key_arr[31-i] = (hexnibble_to_int(key_big_endian[i*2]) << 4) +  hexnibble_to_int(key_big_endian[i*2 + 1]);
-    for (i = 0; i < 32;i++)
-        rhash_arr[31-i] = (hexnibble_to_int(rhash_big_endian[i*2]) << 4) +  hexnibble_to_int(rhash_big_endian[i*2 + 1]);
-    int result_sw = sw_verify_rhash(sig_arr, rhash_arr, key_arr);
-    int result_hw = hw_verify_sync(sig_arr, rhash_arr, key_arr);
-    if (result_sw == result_hw)
-        printf("[PASS] sw=%d hw=%d\n",result_sw, result_hw);
-    else
-        printf("[FAIL] sw=%d hw=%d\n",result_sw, result_hw);  
-}
-
-// void check_hex_sig_nhash(const char* sig_big_endian, const char* key_big_endian, const char* message_big_endian)
-// {
-//     __attribute__((aligned(4))) uint8_t sig_arr [64];
-//     __attribute__((aligned(4))) uint8_t key_arr [32];
-//     __attribute__((aligned(4))) uint8_t message_arr [256];
-//     __attribute__((aligned(4))) uint8_t rhash_arr [32];
-//     int mlen = strlen(message_big_endian) / 2;
-//     ldhex(64, sig_arr, sig_big_endian);
-//     ldhex(32, key_arr, key_big_endian);
-//     ldhex(mlen, message_arr, message_big_endian);
-//     calc_rhash(sig_arr, message_arr, mlen, key_arr, rhash_arr);
-//     int result_sw = sw_verify_rhash(sig_arr, rhash_arr, key_arr);
-//     int result_hw = hw_verify_sync(sig_arr, rhash_arr, key_arr);
-//     if (result_sw == result_hw)
-//         printf("[PASS] sw=%d hw=%d\n",result_sw, result_hw);
-//     else
-//         printf("[FAIL] sw=%d hw=%d\n",result_sw, result_hw);  
-// }
-
-
-unsigned int load(const char *fname, uint8_t **sigs, uint8_t **keys, uint8_t **msgs)
+unsigned int load(const char *fname, uint8_t (*sigs)[SIGNATURE_LEN], uint8_t (*keys)[KEY_LEN], uint8_t (*msgs)[MSG_LEN])
 {
     //assume pointers are not NULL
     
@@ -155,7 +99,7 @@ unsigned int load(const char *fname, uint8_t **sigs, uint8_t **keys, uint8_t **m
     while (1) {
         unsigned char *pos;
 
-        if (count <= MAX_TESTS)
+        if (count >= MAX_TESTS)
             break;
 
         if (fscanf(fp, "%s", str) == EOF)
@@ -163,7 +107,7 @@ unsigned int load(const char *fname, uint8_t **sigs, uint8_t **keys, uint8_t **m
 
         pos = str + 3; // get rid of heading of each line
         for (i = KEY_LEN - 1; i >= 0; i--) {
-            sscanf(pos, "%2hhx", &keys[count][j]);
+            sscanf(pos, "%2hhx", &keys[count][i]);
             pos += 2 * sizeof(char);
         }
     
@@ -172,14 +116,14 @@ unsigned int load(const char *fname, uint8_t **sigs, uint8_t **keys, uint8_t **m
         fscanf(fp, "%s", str);
         pos = str + 4;
         for (i = MSG_LEN - 1; i >= 0; i--) {
-            sscanf(pos, "%2hhx", &msgs[count][j]);
+            sscanf(pos, "%2hhx", &msgs[count][i]);
             pos += 2 * sizeof(char);
         }
         
         fscanf(fp, "%s", str);
         pos = str + 4;
         for (i = SIGNATURE_LEN - 1; i >= 0; i--) {
-            sscanf(pos, "%2hhx", &sigs[count][j]);
+            sscanf(pos, "%2hhx", &sigs[count][i]);
             pos += 2 * sizeof(char);
         }
 
@@ -196,17 +140,46 @@ void go(const char* fname)
     __attribute__((aligned(4))) uint8_t msgs [MAX_TESTS][MSG_LEN];
     __attribute__((aligned(4))) uint8_t rhashs [MAX_TESTS][RHASH_LEN];
   
-    uint8_t results[MAX_TESTS];
+    uint8_t hw_results[MAX_TESTS];
+    uint8_t sw_results[MAX_TESTS];
     
-    unsigned int count = load(fname, keys, msgs, sigs);
+    unsigned int count = load(fname, sigs, keys, msgs);
     unsigned int i;
-    // start timing
-    calc_rhash(sigs[0], msgs[0], MSG_LEN, keys[0], rhashs[0]);
-    for (i = 0; i < count; i++) {
-        hw_verify_async(sigs[i], rhashs[i], keys[i]);
-        calc_rhash(sigs[i"], msgs[i], MSG_LEN, keys[i], rhashs[i]);
-        results[i] = hw_verify_wait();
-    }
+    clock_t start;
+    clock_t stop;
 
+    // FPGA
+    uint32_t epu_idx;
+    // start timing
+    start = clock();
+    calc_rhash(sigs[0], msgs[0], MSG_LEN, keys[0], rhashs[0]);
+    for (i = 0; i < count-1; i++) {
+        epu_idx = hw_verify_async(sigs[i], rhashs[i], keys[i]);
+        calc_rhash(sigs[i+1], msgs[i+1], MSG_LEN, keys[i+1], rhashs[i+1]);
+        hw_results[i] = hw_verify_wait(epu_idx);
+        // printf("HW result %d: %d\n", i, hw_results[i]);
+    }
+    epu_idx = hw_verify_async(sigs[i], rhashs[i], keys[i]);
+    hw_results[i] = hw_verify_wait(epu_idx);
+    // printf("HW result %d: %d\n", i, hw_results[i]);
     // stop timing
+    stop = clock();
+    printf("HW takes %f ms for %u signatures.\n", ((double)(stop - start))/(CLOCKS_PER_SEC/1000), count);
+    
+    // ARM
+    // start timing
+    start = clock();
+    for (i = 0; i < count; i++) {
+        sw_results[i] = sw_verify(sigs[i], msgs[i], keys[i]);
+        // printf("SW result %d: %d\n", i, sw_results[i]);
+    }
+    // stop timing
+    stop = clock();
+    printf("SW takes %f ms for %u signatures.\n", ((double)(stop - start))/(CLOCKS_PER_SEC/1000), count);
+
+    for (i = 0; i < count; i++) {
+        if (sw_results[i] != hw_results[i]) {
+            printf("HW (%d) and SW (%d) results don't match at index %d!.\n", hw_results[i], sw_results[i], i);
+        }
+    }
 }
